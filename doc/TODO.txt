@@ -1,0 +1,1 @@
+make the resolution of the output images higher. They look terrible.
