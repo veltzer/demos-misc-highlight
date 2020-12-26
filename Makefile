@@ -19,7 +19,10 @@ endif # DO_MKDBG
 OUT_DIR:=out
 SOURCES=$(shell find source -type f)
 OPTS=-O "fontface=Fira Code,fontsize=50,line_numbers=False,style=monokai,bg=\#000000"
-# OPTS=
+WK_OPTIONS=--quiet --quality 100 --width 2048 --zoom 3 --minimum-font-size 50
+# WK_OPTIONS=--zoom 20.5 --minimum-font-size 32 --disable-smart-width
+#ALL_DEPS:=Makefile
+ALL_DEPS:=
 
 BASE_SVG=$(addsuffix .svg, $(SOURCES))
 BASE_JPG=$(addsuffix .jpg, $(SOURCES))
@@ -49,35 +52,35 @@ ALL+=$(OUT_CONVERT_PNG)
 .PHONY: all
 all: $(ALL)
 
-$(OUT_SVG): out/%.svg: % Makefile
+$(OUT_SVG): out/%.svg: % $(ALL_DEPS)
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)pygmentize -f svg $(OPTS) -o $@ $<
-$(OUT_JPG): out/%.jpg: % Makefile
+$(OUT_JPG): out/%.jpg: % $(ALL_DEPS)
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)pygmentize -f jpg $(OPTS) -o $@ $<
-$(OUT_HTM): out/%.htm: % Makefile
+$(OUT_HTM): out/%.htm: % $(ALL_DEPS)
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f html -O full $(OPTS) -o $@ $<
-$(OUT_PNG): out/%.png: % Makefile
+$(OUT_PNG): out/%.png: % $(ALL_DEPS)
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f png $(OPTS) -o $@ $<
-$(OUT_RTF): out/%.rtf: % Makefile
+$(OUT_RTF): out/%.rtf: % $(ALL_DEPS)
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f rtf $(OPTS) -o $@ $<
 
-$(OUT_CONVERT_JPG): out/htm2jpg/%.jpg: out/% Makefile
+$(OUT_CONVERT_JPG): out/htm2jpg/%.jpg: out/% $(ALL_DEPS)
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
-	$(Q)wkhtmltoimage --quiet --quality 100 $< $@
-$(OUT_CONVERT_PNG): out/htm2png/%.png: out/% Makefile
+	$(Q)wkhtmltoimage $(WK_OPTIONS) $< $@
+$(OUT_CONVERT_PNG): out/htm2png/%.png: out/% $(ALL_DEPS)
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
-	$(Q)wkhtmltoimage --quiet --quality 100 $< $@
+	$(Q)wkhtmltoimage $(WK_OPTIONS) $< $@
 
 .PHONY: debug
 debug:
@@ -101,3 +104,7 @@ clean_hard:
 	$(info doing [$@])
 	$(Q)git clean -qffxd
 
+.PHONY: results
+results:
+	$(info doing [$@])
+	$(Q)geeqie
