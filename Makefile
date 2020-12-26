@@ -1,62 +1,103 @@
-SOURCES=source/puppet.pp
-# SOURCES=puppet.pp user.rb
+##############
+# PARAMETERS #
+##############
+# do you want to see the commands executed ?
+DO_MKDBG:=0
+
+########
+# CODE #
+########
+# silent stuff
+ifeq ($(DO_MKDBG),1)
+Q:=
+# we are not silent in this branch
+else # DO_MKDBG
+Q:=@
+#.SILENT:
+endif # DO_MKDBG
+
+OUT_DIR:=out
+SOURCES=$(shell find source -type f)
 OPTS=-O "fontface=Fira Code,fontsize=50,line_numbers=False,style=monokai,bg=\#000000"
 # OPTS=
 
-OUT_SVG=$(addprefix out,$(addsuffix .svg, $(basename $(SOURCES))))
-OUT_JPG=$(addprefix out,$(addsuffix .jpg, $(basename $(SOURCES))))
-OUT_CONVERT_JPG=$(addsuffix _convert.jpg, $(basename $(SOURCES))))
-OUT_HTM=$(addprefix out,$(addsuffix .htm, $(basename $(SOURCES))))
-OUT_PNG=$(addprefix out,$(addsuffix .png, $(basename $(SOURCES))))
-OUT_CONVERT_PNG=$(addprefix out,$(addsuffix _convert.png, $(basename $(SOURCES))))
-OUT_RTF=$(addprefix out,$(addsuffix .rtf, $(basename $(SOURCES))))
+BASE_SVG=$(addsuffix .svg, $(SOURCES))
+BASE_JPG=$(addsuffix .jpg, $(SOURCES))
+BASE_HTM=$(addsuffix .htm, $(SOURCES))
+BASE_PNG=$(addsuffix .png, $(SOURCES))
+BASE_RTF=$(addsuffix .rtf, $(SOURCES))
+
+OUT_SVG=$(addprefix out/,$(BASE_SVG))
+OUT_JPG=$(addprefix out/,$(BASE_JPG))
+OUT_HTM=$(addprefix out/,$(BASE_HTM))
+OUT_PNG=$(addprefix out/,$(BASE_PNG))
+OUT_RTF=$(addprefix out/,$(BASE_RTF))
+
+OUT_CONVERT_JPG=$(addprefix out/htm2jpg/,$(addsuffix .jpg, $(BASE_HTM)))
+OUT_CONVERT_PNG=$(addprefix out/htm2png/,$(addsuffix .png, $(BASE_HTM)))
 
 
 ALL:=
 ALL+=$(OUT_SVG)
 ALL+=$(OUT_JPG)
-ALL+=$(OUT_CONVERT_JPG)
 ALL+=$(OUT_HTM)
 ALL+=$(OUT_PNG)
-ALL+=$(OUT_CONVERT_PNG)
 ALL+=$(OUT_RTF)
+ALL+=$(OUT_CONVERT_JPG)
+ALL+=$(OUT_CONVERT_PNG)
 
 .PHONY: all
 all: $(ALL)
 
-#$(OUT_SVG): %.svg: %.rb Makefile
-#	pygmentize -f svg $(OPTS) -o $@ $<
-#$(OUT_JPG): %.jpg: %.rb Makefile
-#	pygmentize -f jpg $(OPTS) -o $@ $<
-#$(OUT_HTM): %.htm: %.rb Makefile
-#	pygmentize -f html $(OPTS) -o $@ $<
-#$(OUT_PNG): %.png: %.rb Makefile
-#	pygmentize -f png $(OPTS) -o $@ $<
-#$(OUT_RTF): %.rtf: %.rb Makefile
-#	pygmentize -f rtf $(OPTS) -o $@ $<
+$(OUT_SVG): out/%.svg: % Makefile
+	$(info doing [$@])
+	$(Q)mkdir -p $(dir $@)
+	$(Q)pygmentize -f svg $(OPTS) -o $@ $<
+$(OUT_JPG): out/%.jpg: % Makefile
+	$(info doing [$@])
+	$(Q)mkdir -p $(dir $@)
+	$(Q)pygmentize -f jpg $(OPTS) -o $@ $<
+$(OUT_HTM): out/%.htm: % Makefile
+	$(Q)mkdir -p $(dir $@)
+	$(info doing [$@])
+	$(Q)pygmentize -f html -O full $(OPTS) -o $@ $<
+$(OUT_PNG): out/%.png: % Makefile
+	$(Q)mkdir -p $(dir $@)
+	$(info doing [$@])
+	$(Q)pygmentize -f png $(OPTS) -o $@ $<
+$(OUT_RTF): out/%.rtf: % Makefile
+	$(Q)mkdir -p $(dir $@)
+	$(info doing [$@])
+	$(Q)pygmentize -f rtf $(OPTS) -o $@ $<
 
-$(OUT_SVG): %.svg: %.pp Makefile
-	pygmentize -f svg $(OPTS) -o $@ $<
-$(OUT_JPG): %.jpg: %.pp Makefile
-	pygmentize -f jpg $(OPTS) -o $@ $<
-$(OUT_CONVERT_JPG): %_convert.jpg: %.htm Makefile
-	wkhtmltoimage --quality 100 $< $@
-$(OUT_HTM): %.htm: %.pp Makefile
-	pygmentize -f html -O full $(OPTS) -o $@ $<
-$(OUT_PNG): %.png: %.pp Makefile
-	pygmentize -f png $(OPTS) -o $@ $<
-$(OUT_CONVERT_PNG): %_convert.png: %.htm Makefile
-	wkhtmltoimage --quality 100 $< $@
-$(OUT_RTF): %.rtf: %.pp Makefile
-	pygmentize -f rtf $(OPTS) -o $@ $<
+$(OUT_CONVERT_JPG): out/htm2jpg/%.jpg: out/% Makefile
+	$(info doing [$@])
+	$(Q)mkdir -p $(dir $@)
+	$(Q)wkhtmltoimage --quiet --quality 100 $< $@
+$(OUT_CONVERT_PNG): out/htm2png/%.png: out/% Makefile
+	$(info doing [$@])
+	$(Q)mkdir -p $(dir $@)
+	$(Q)wkhtmltoimage --quiet --quality 100 $< $@
 
 .PHONY: debug
 debug:
 	$(info SOURCES is $(SOURCES))
+	$(info BASE_SVG is $(BASE_SVG))
+	$(info BASE_JPG is $(BASE_JPG))
+	$(info BASE_HTM is $(BASE_HTM))
+	$(info BASE_PNG is $(BASE_PNG))
+	$(info BASE_RTF is $(BASE_RTF))
 	$(info OUT_SVG is $(OUT_SVG))
 	$(info OUT_JPG is $(OUT_JPG))
-	$(info OUT_CONVERT_JPG is $(OUT_CONVERT_JPG))
 	$(info OUT_HTM is $(OUT_HTM))
 	$(info OUT_PNG is $(OUT_PNG))
 	$(info OUT_RTF is $(OUT_RTF))
+	$(info OUT_CONVERT_JPG is $(OUT_CONVERT_JPG))
+	$(info OUT_CONVERT_PNG is $(OUT_CONVERT_PNG))
 	$(info ALL is $(ALL))
+
+.PHONY: clean_hard
+clean_hard:
+	$(info doing [$@])
+	$(Q)git clean -qffxd
+
