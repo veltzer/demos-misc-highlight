@@ -1,5 +1,5 @@
 # demos-pygments
-Demos for the pygments syntax highlighting library
+Demos for how to do code highlighting using various tools
 
 ## The results?
 
