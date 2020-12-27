@@ -1,6 +1,13 @@
 # demos-pygments
 Demos for how to do code highlighting using various tools
 
+## Tools
+
+* pygments
+* cli-highlight
+
+More to come...
+
 ## The results?
 
 * To get good images use wkhtmltoimage(1) to convert the HTML output of pygments to an image.
