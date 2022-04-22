@@ -3,6 +3,8 @@
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
+# do you want dependency on the Makefile itself ?
+DO_ALLDEP:=1
 
 ########
 # CODE #
@@ -16,13 +18,16 @@ Q:=@
 #.SILENT:
 endif # DO_MKDBG
 
+# dependency on the makefile itself
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif
+
 OUT_DIR:=out
 SOURCES=$(shell find source -type f)
 OPTS=-O "fontface=Fira Code,fontsize=50,line_numbers=False,style=monokai,bg=\#000000"
 WK_OPTIONS=--quiet --quality 100 --width 2048 --zoom 3 --minimum-font-size 50
 # WK_OPTIONS=--zoom 20.5 --minimum-font-size 32 --disable-smart-width
-#ALL_DEPS:=Makefile
-ALL_DEPS:=
 
 BASE_SVG=$(addsuffix .svg, $(SOURCES))
 BASE_JPG=$(addsuffix .jpg, $(SOURCES))
@@ -52,32 +57,32 @@ ALL+=$(OUT_CONVERT_PNG)
 .PHONY: all
 all: $(ALL)
 
-$(OUT_SVG): out/%.svg: % $(ALL_DEPS)
+$(OUT_SVG): out/%.svg: %
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)pygmentize -f svg $(OPTS) -o $@ $<
-$(OUT_JPG): out/%.jpg: % $(ALL_DEPS)
+$(OUT_JPG): out/%.jpg: %
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)pygmentize -f jpg $(OPTS) -o $@ $<
-$(OUT_HTM): out/%.htm: % $(ALL_DEPS)
+$(OUT_HTM): out/%.htm: %
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f html -O full $(OPTS) -o $@ $<
-$(OUT_PNG): out/%.png: % $(ALL_DEPS)
+$(OUT_PNG): out/%.png: %
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f png $(OPTS) -o $@ $<
-$(OUT_RTF): out/%.rtf: % $(ALL_DEPS)
+$(OUT_RTF): out/%.rtf: %
 	$(Q)mkdir -p $(dir $@)
 	$(info doing [$@])
 	$(Q)pygmentize -f rtf $(OPTS) -o $@ $<
 
-$(OUT_CONVERT_JPG): out/htm2jpg/%.jpg: out/% $(ALL_DEPS)
+$(OUT_CONVERT_JPG): out/htm2jpg/%.jpg: out/%
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)wkhtmltoimage $(WK_OPTIONS) $< $@
-$(OUT_CONVERT_PNG): out/htm2png/%.png: out/% $(ALL_DEPS)
+$(OUT_CONVERT_PNG): out/htm2png/%.png: out/%
 	$(info doing [$@])
 	$(Q)mkdir -p $(dir $@)
 	$(Q)wkhtmltoimage $(WK_OPTIONS) $< $@
