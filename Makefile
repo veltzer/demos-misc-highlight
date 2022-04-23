@@ -56,6 +56,7 @@ ALL+=$(OUT_CONVERT_PNG)
 
 .PHONY: all
 all: $(ALL)
+	@true
 
 $(OUT_SVG): out/%.svg: %
 	$(info doing [$@])
