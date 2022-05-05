@@ -1,4 +1,3 @@
 packages=[
-    'npm',
-    'nodejs',
+    'wkhtmltopdf',
 ]
