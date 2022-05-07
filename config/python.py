@@ -6,6 +6,9 @@ dev_requires = [
     "pymakehelper",
     "pydmt",
     "pyclassifiers",
+]
+
+run_requires = [
     "pillow",
 ]
 
