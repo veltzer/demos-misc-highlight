@@ -8,7 +8,7 @@ dev_requires = [
     "pyclassifiers",
 ]
 
-run_requires = [
+install_requires = [
     "pillow",
 ]
 
