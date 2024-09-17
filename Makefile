@@ -1,5 +1,5 @@
 ##############
-# PARAMETERS #
+# parameters #
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
@@ -7,7 +7,7 @@ DO_MKDBG:=0
 DO_ALLDEP:=1
 
 ########
-# CODE #
+# code #
 ########
 # silent stuff
 ifeq ($(DO_MKDBG),1)
@@ -54,6 +54,9 @@ ALL+=$(OUT_RTF)
 ALL+=$(OUT_CONVERT_JPG)
 ALL+=$(OUT_CONVERT_PNG)
 
+#########
+# rules #
+#########
 .PHONY: all
 all: $(ALL)
 	@true
