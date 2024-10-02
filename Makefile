@@ -18,11 +18,6 @@ Q:=@
 #.SILENT:
 endif # DO_MKDBG
 
-# dependency on the makefile itself
-ifeq ($(DO_ALLDEP),1)
-.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
-endif # DO_ALLDEP
-
 OUT_DIR:=out
 SOURCES=$(shell find source -type f)
 OPTS=-O "fontface=Fira Code,fontsize=50,line_numbers=False,style=monokai,bg=\#000000"
@@ -117,3 +112,10 @@ clean_hard:
 results:
 	$(info doing [$@])
 	$(Q)geeqie
+
+##########
+# alldep #
+##########
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif # DO_ALLDEP
