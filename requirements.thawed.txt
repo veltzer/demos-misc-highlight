@@ -1,4 +1,9 @@
 # THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
+mypy
 pillow
+pycmdtools
 pydmt
+pylint
 pymakehelper
+pytest
+ruff
