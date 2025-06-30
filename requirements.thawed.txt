@@ -1,6 +1,7 @@
 # THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
 mypy
 pillow
+pyclassifiers
 pycmdtools
 pydmt
 pylint
