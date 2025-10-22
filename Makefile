@@ -5,6 +5,8 @@
 DO_MKDBG:=0
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
+# do you want to convert html pages to images?
+DO_CONVERT:=0
 
 ########
 # code #
@@ -36,9 +38,10 @@ OUT_HTM=$(addprefix out/,$(BASE_HTM))
 OUT_PNG=$(addprefix out/,$(BASE_PNG))
 OUT_RTF=$(addprefix out/,$(BASE_RTF))
 
+ifeq ($(DO_CONVERT),1)
 OUT_CONVERT_JPG=$(addprefix out/htm2jpg/,$(addsuffix .jpg, $(BASE_HTM)))
 OUT_CONVERT_PNG=$(addprefix out/htm2png/,$(addsuffix .png, $(BASE_HTM)))
-
+endif # DO_CONVERT
 
 ALL:=
 ALL+=$(OUT_SVG)
@@ -46,6 +49,8 @@ ALL+=$(OUT_JPG)
 ALL+=$(OUT_HTM)
 ALL+=$(OUT_PNG)
 ALL+=$(OUT_RTF)
+
+
 ALL+=$(OUT_CONVERT_JPG)
 ALL+=$(OUT_CONVERT_PNG)
 
