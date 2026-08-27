@@ -12,9 +12,6 @@ src_dirs = ["scripts"]
 [processor.mypy]
 src_dirs = ["scripts"]
 
-[processor.requirements]
-src_dirs = ["scripts"]
-
 [processor.taplo]
 src_dirs = ["."]
 
@@ -34,8 +31,3 @@ output_extension = "svg"
 batch = false
 
 # pygments provides pygmentize; the png/jpg formats need Pillow.
-[dependencies]
-pip = [
-    "pygments",
-    "pillow",
-]
