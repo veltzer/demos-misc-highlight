@@ -1,4 +1,4 @@
-# demos-pygments
+# demos-misc-highlight
 Demos for how to do code highlighting using various tools
 
 ## Tools
