@@ -6,14 +6,14 @@ reject_dot_src_dirs = true
 
 [analyzer.python]
 
-[processor.ruff]
+[processor.checker.ruff]
 src_dirs = ["scripts"]
 
 
-[processor.mypy]
+[processor.checker.mypy]
 src_dirs = ["scripts"]
 
-[processor.taplo]
+[processor.checker.taplo]
 src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 
 # ─── repo-specific configuration ────────────────────────────────────────────
@@ -23,7 +23,7 @@ src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 # scripts/highlight.py, which emits all five per source (pygmentize writes one
 # format per run). DO_CONVERT was 0, so the imagemagick htm2jpg/htm2png follow-on
 # conversions were off and are not reproduced.
-[processor.generator.highlight]
+[processor.generator.generic.highlight]
 command = "scripts/highlight.py"
 src_dirs = ["source"]
 src_extensions = [".rb", ".sh", ".pp"]
@@ -34,15 +34,15 @@ batch = false
 # pygments provides pygmentize; the png/jpg formats need Pillow.
 
 # lint the GitHub Actions workflow files with actionlint
-[processor.actionlint]
+[processor.checker.actionlint]
 src_dirs = [".github/workflows"]
 
 # ─── markdown ────────────────────────────────────────────────────────────────
 
-[processor.rumdl]
+[processor.checker.rumdl]
 src_files = ["README.md"]
 
 # ─── shell ───────────────────────────────────────────────────────────────────
 
-[processor.shellcheck]
+[processor.checker.shellcheck]
 src_dirs = ["source"]
