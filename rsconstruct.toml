@@ -19,17 +19,55 @@ src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 # ─── repo-specific configuration ────────────────────────────────────────────
 
 # The Makefile rendered each source/* file to five pygmentize formats (svg, jpg,
-# html -O full, png, rtf) with a shared style. The generator drives
-# scripts/highlight.py, which emits all five per source (pygmentize writes one
-# format per run). DO_CONVERT was 0, so the imagemagick htm2jpg/htm2png follow-on
-# conversions were off and are not reproduced.
-[processor.generator.generic.highlight]
+# html -O full, png, rtf) with a shared style. One generator instance per
+# format, so each output is declared: scripts/highlight.py renders the format
+# its output's extension names. DO_CONVERT was 0, so the imagemagick
+# htm2jpg/htm2png follow-on conversions were off and are not reproduced.
+# required_tools: the script and pygmentize are Python, which writes bytecode.
+[processor.generator.generic.highlight_svg]
 command = "scripts/highlight.py"
 src_dirs = ["source"]
 src_extensions = [".rb", ".sh", ".pp"]
 output_dir = "out"
 output_extension = "svg"
 batch = false
+required_tools = ["python"]
+
+[processor.generator.generic.highlight_jpg]
+command = "scripts/highlight.py"
+src_dirs = ["source"]
+src_extensions = [".rb", ".sh", ".pp"]
+output_dir = "out"
+output_extension = "jpg"
+batch = false
+required_tools = ["python"]
+
+[processor.generator.generic.highlight_html]
+command = "scripts/highlight.py"
+src_dirs = ["source"]
+src_extensions = [".rb", ".sh", ".pp"]
+output_dir = "out"
+output_extension = "html"
+batch = false
+required_tools = ["python"]
+
+[processor.generator.generic.highlight_png]
+command = "scripts/highlight.py"
+src_dirs = ["source"]
+src_extensions = [".rb", ".sh", ".pp"]
+output_dir = "out"
+output_extension = "png"
+batch = false
+required_tools = ["python"]
+
+[processor.generator.generic.highlight_rtf]
+command = "scripts/highlight.py"
+src_dirs = ["source"]
+src_extensions = [".rb", ".sh", ".pp"]
+output_dir = "out"
+output_extension = "rtf"
+batch = false
+required_tools = ["python"]
 
 # pygments provides pygmentize; the png/jpg formats need Pillow.
 
