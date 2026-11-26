@@ -71,6 +71,11 @@ required_tools = ["python"]
 
 # pygments provides pygmentize; the png/jpg formats need Pillow.
 
+# lint the YAML files with yamllint (policy: .yamllint.yaml)
+[processor.checker.iyamllint]
+src_dirs = [".github"]
+src_files = [".yamllint.yaml"]
+
 # lint the GitHub Actions workflow files with actionlint
 [processor.checker.iactionlint]
 src_dirs = [".github/workflows"]
