@@ -15,7 +15,7 @@ OPTS = [
 ]
 
 # output format -> extra pygmentize args
-FORMATS = {
+FORMATS: dict[str, list[str]] = {
     "svg": [],
     "jpg": [],
     "html": ["-O", "full"],
